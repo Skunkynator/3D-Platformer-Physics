@@ -47,7 +47,17 @@ public static class skunkyExtensions
         if (v3l.Count != 4)
             throw new System.Exception("List doesnt contain 4 elements");
         List<Vector3> output = new List<Vector3>();
-        List<List<Vector3>> subParts = new List<List<Vector3>>();               
+        foreach(Vector3 v3a in v3l)
+        {
+            List<Vector3> subDiv = new List<Vector3>();
+            foreach(Vector3 v3b in v3l)
+            {
+                subDiv.Add((v3a + v3b) / 2);
+            }
+            if (power > 1)
+                subDiv.subDivide(power - 1);
+            output = output.Union(subDiv, new Vector3Comparer()).ToList();
+        }          
         return output;
     }
 }
