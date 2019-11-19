@@ -60,4 +60,11 @@ public static class skunkyExtensions
         }          
         return output;
     }
+    public static Vector3 Divide(this Vector3 vec1, Vector3 divisor)
+    {
+        vec1.x /= divisor.x;
+        vec1.y /= divisor.y;
+        vec1.z /= divisor.z;
+        return vec1;
+    }
 }
