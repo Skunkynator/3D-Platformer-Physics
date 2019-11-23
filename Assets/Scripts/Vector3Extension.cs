@@ -60,6 +60,22 @@ public static class skunkyExtensions
         }          
         return output;
     }
+    public static Vector3 closestDirectionTo(this List<Vector3> directions,Vector3 direction)
+    {
+        Vector3 closestDir = Vector3.one;
+        float closestAng = float.PositiveInfinity;
+        float currAng;
+        foreach(Vector3 dir in directions)
+        {
+            currAng = Vector3.Angle(dir, direction);
+            if (currAng < closestAng)
+            {
+                closestAng = currAng;
+                closestDir = dir;
+            }
+        }
+        return closestDir;
+    }
     public static Vector3 Divide(this Vector3 vec1, Vector3 divisor)
     {
         vec1.x /= divisor.x;

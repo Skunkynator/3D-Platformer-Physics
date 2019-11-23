@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class GravityController : MonoBehaviour
 {
+    private void Update()
+    {
+        Vector3 pos = transform.position;
+        Debug.DrawLine(pos, pos + checkForGravity(pos).normalized);
+    }
     public Vector3 checkForGravity(Vector3 position)
     {
         Vector3 output;
@@ -11,7 +16,7 @@ public class GravityController : MonoBehaviour
         bool foundGravity = false;
         while(idx < GravityField.allFields.Count && !foundGravity)
         {
-            foundGravity = GravityField.allFields[idx].inField(position);
+            foundGravity = GravityField.allFields[idx].InField(position);
             idx++;
         }
 

@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class SphereGravityField : GravityField
 {
-    Vector3 position;
+    [SerializeField]
     float radius;
 
     public override Vector3 getGravityDir(Vector3 position)
     {
-        return SingleDir ? getGravityDir() : locToWorld.MultiplyPoint3x4(this.position) - position;
+        return SingleDir ? getGravityDir() : locToWorld.MultiplyPoint3x4(this.middle) - position;
     }
 
-    public override bool inField(Vector3 position)
+    public override bool InField(Vector3 position)
     {
-        return getGravityDir(position).magnitude > radius;
+        return getGravityDir(position).magnitude < radius;
     }
 
     public override float Strength(Vector3 position)

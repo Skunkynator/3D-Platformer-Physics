@@ -4,28 +4,26 @@ using UnityEngine;
 
 public class BoxGravityField : GravityField
 {
-    Vector3 middle;
-    float height;
-    float length;
-    float width;
+    [SerializeField]
     Vector3 size;
+
     public override Vector3 getGravityDir(Vector3 position)
     {
         position = worldToLoc.MultiplyPoint3x4(position);
-        position = position.Divide(size);
         Vector3 dir = middle - position;
-
-        throw new System.NotImplementedException();
+        dir = dir.Divide(size);
+        return allDir.closestDirectionTo(dir);
     }
-    public override bool inField(Vector3 position)
+    public override bool InField(Vector3 position)
     {
         position = worldToLoc.MultiplyPoint3x4(position);
-        return Mathf.Abs(middle.y - position.y) < size.y / 2 ||
-            Mathf.Abs(middle.z - position.z) < size.z / 2 ||
-            Mathf.Abs(middle.x - position.x) < size.x / 2;
+        position = position - middle;
+        return Mathf.Abs(position.y) < size.y / 2 &&
+            Mathf.Abs(position.z) < size.z / 2 &&
+            Mathf.Abs(position.x) < size.x / 2;
     }
     public override float Strength(Vector3 position)
     {
-        throw new System.NotImplementedException();
+        return 10;
     }
 }
