@@ -29,10 +29,13 @@ public class BoxRayCollider3D : RayCollider3D
         Matrix4x4 ltwMX = transform.localToWorldMatrix;
         testObject.transform.position = ltwMX.MultiplyPoint3x4(boxEdges[0]);
         Debug.DrawLine(ltwMX.MultiplyPoint3x4(boxEdges[1]), ltwMX.MultiplyPoint3x4(boxEdges[1]) - transform.right);
-        foreach(Vector3 edge in boxEdges)
+        foreach(List<Vector3> v3l in origins)
         {
-            Vector3 eedge = ltwMX.MultiplyPoint3x4(edge);
-            Debug.DrawLine(eedge, eedge + Vector3.up / 10);
+            foreach (Vector3 orig in v3l)
+            {
+                Vector3 eedge = ltwMX.MultiplyPoint3x4(orig);
+                Debug.DrawLine(eedge, eedge + Vector3.up / 100,Color.cyan);
+            }
         }
     }
 
@@ -50,17 +53,17 @@ public class BoxRayCollider3D : RayCollider3D
 
     void initiateOrigins()
     {
-        origins.up = boxEdges.VectorsPointingAt(Vector3.up);
-        origins.down = boxEdges.VectorsPointingAt(Vector3.down);
-        origins.left = boxEdges.VectorsPointingAt(Vector3.left);
-        origins.right = boxEdges.VectorsPointingAt(Vector3.right);
-        origins.forward = boxEdges.VectorsPointingAt(Vector3.forward);
-        origins.back = boxEdges.VectorsPointingAt(Vector3.back);
+        origins.up = boxEdges.VectorsPointingAt(Vector3.up).subDivide(3);
+        origins.down = boxEdges.VectorsPointingAt(Vector3.down).subDivide(3);
+        origins.left = boxEdges.VectorsPointingAt(Vector3.left).subDivide(3);
+        origins.right = boxEdges.VectorsPointingAt(Vector3.right).subDivide(3);
+        origins.forward = boxEdges.VectorsPointingAt(Vector3.forward).subDivide(3);
+        origins.back = boxEdges.VectorsPointingAt(Vector3.back).subDivide(3);
     }
 
 
 
-    struct boxRayOrigins
+    struct boxRayOrigins : IEnumerable
     {
         public List<Vector3> up;
         public List<Vector3> down;
@@ -68,5 +71,17 @@ public class BoxRayCollider3D : RayCollider3D
         public List<Vector3> right;
         public List<Vector3> forward;
         public List<Vector3> back;
+
+        public IEnumerator GetEnumerator()
+        {
+            List<List<Vector3>> output = new List<List<Vector3>>();
+            output.Add(up);
+            output.Add(down);
+            output.Add(left);
+            output.Add(right);
+            output.Add(forward);
+            output.Add(back);
+            return output.GetEnumerator();
+        }
     }
 }
