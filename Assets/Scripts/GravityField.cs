@@ -32,4 +32,12 @@ public abstract class GravityField : MonoBehaviour
     }
     abstract public bool InField(Vector3 position);
     abstract public float Strength(Vector3 position);
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        float size = 0.3f;
+        Gizmos.DrawLine(transform.position - Vector3.up * size, transform.position + Vector3.up * size);
+        Gizmos.DrawLine(transform.position - Vector3.right * size, transform.position + Vector3.right * size);
+        Gizmos.DrawLine(transform.position - Vector3.forward * size, transform.position + Vector3.forward * size);
+    }
 }

@@ -16,6 +16,7 @@ class CylindricGravityField : GravityField
         position = worldToLoc.MultiplyPoint3x4(position);
         position = position - middle;
         position.y = 0;
+        position = locToWorld.MultiplyVector(position);
         return -position;
     }
 
@@ -23,7 +24,7 @@ class CylindricGravityField : GravityField
     {
         position = worldToLoc.MultiplyPoint3x4(position);
         position = position - middle;
-        bool output = position.y < height;
+        bool output = position.y < height && position.y >= 0;
         if(output)
         {
             position.y = 0;

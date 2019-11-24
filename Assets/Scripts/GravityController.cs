@@ -7,24 +7,30 @@ public class GravityController : MonoBehaviour
     private void Update()
     {
         Vector3 pos = transform.position;
-        Debug.DrawLine(pos, pos + checkForGravity(pos).normalized);
+        Debug.DrawLine(pos, pos + checkForGravity(pos));
     }
     public Vector3 checkForGravity(Vector3 position)
     {
-        Vector3 output;
+        Vector3 output = Vector3.zero;
         int idx = 0;
-        bool foundGravity = false;
-        while(idx < GravityField.allFields.Count && !foundGravity)
+        List<GravityField> foundGravitys = new List<GravityField>();
+        foreach(GravityField field in GravityField.allFields)
         {
-            foundGravity = GravityField.allFields[idx].InField(position);
-            idx++;
+            if (field.InField(position))
+                foundGravitys.Add(field);
         }
 
         //if fitting grav field hasnt been found, return default grav
-        if (!foundGravity)
+        if (foundGravitys.Count <= 0)
             output = Vector3.down;
         else
-            output = GravityField.allFields[idx - 1].getGravityDir(position);
+        {
+            foreach(GravityField field in foundGravitys)
+            {
+                output += field.getGravityDir(position);
+            }
+            output /= foundGravitys.Count;
+        }
 
         return output;
     }
