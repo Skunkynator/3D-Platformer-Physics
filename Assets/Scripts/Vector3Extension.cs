@@ -83,4 +83,17 @@ public static class skunkyExtensions
         vec1.z /= divisor.z;
         return vec1;
     }
+
+    public static Vector3 multiply(this Vector3 vec1, Vector3 mult)
+    {
+        vec1.x *= mult.x;
+        vec1.y *= mult.y;
+        vec1.z *= mult.z;
+        return vec1;
+    }
+
+    public static float sumOfCoord(this Vector3 vect)
+    {
+        return vect.x + vect.y + vect.z;
+    }
 }

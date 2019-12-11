@@ -23,6 +23,8 @@ public abstract class GravityField : MonoBehaviour
         locToWorld = transform.localToWorldMatrix;
         worldToLoc = transform.worldToLocalMatrix;
         allFields.Add(this);
+        new BezierCurve(new Vector3(30, 10), new Vector3(30, 160), new Vector3(-60, 34), new Vector3(75, 40));
+
     }
     public abstract Vector3 getGravityDir(Vector3 position);
 
