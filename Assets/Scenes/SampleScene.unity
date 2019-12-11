@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 55808219}
   - component: {fileID: 55808218}
   - component: {fileID: 55808217}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 295587100}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -566,7 +566,7 @@ GameObject:
   - component: {fileID: 1135712078}
   - component: {fileID: 1135712080}
   - component: {fileID: 1135712079}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -600,14 +600,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1127cf5b2b7ce364890ce95de625c52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityDir: {x: 0, y: -1, z: 0}
-  viewDirection: {x: 0, y: 0, z: 1}
-  skinWidth: 0.3
-  RayCastOrigin: []
+  skinWidth: 0
   GravityStrength: 10
-  boxEdges: []
-  collider: {fileID: 0}
   testObject: {fileID: 1321587401}
+  rayAmountX: 3
+  rayAmountY: 4
+  rayAmountZ: 3
 --- !u!65 &1135712080
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -937,6 +935,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: pyramid
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9f0668f1f083912429ec122d28f7295f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9f0668f1f083912429ec122d28f7295f,
         type: 3}

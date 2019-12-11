@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public abstract class RayCollider3D : MonoBehaviour
+public abstract class RayController3D : MonoBehaviour
 {
     public Vector3 ViewDirection
     {
@@ -35,7 +35,8 @@ public abstract class RayCollider3D : MonoBehaviour
     Vector3 gravityDir = Vector3.down;
     Vector3 viewDirection = Vector3.forward;
     [SerializeField]
-    float skinWidth = 0.3f;
+    protected float skinWidth = 0.3f;
+    protected Matrix4x4 ltwMX;
     List<Vector3> RayCastOrigin = new List<Vector3>();
     public int GravityStrength = 10;
     private void setRotation(Vector3 directionTest, Vector3 gravityDirTest)
@@ -46,6 +47,7 @@ public abstract class RayCollider3D : MonoBehaviour
         q.SetLookRotation(directionTest, gravityDirTest);
         transform.localRotation = q;
     }
+
 
 
 }
