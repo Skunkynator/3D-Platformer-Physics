@@ -27,9 +27,9 @@ public class GravityController : MonoBehaviour
         {
             foreach(GravityField field in foundGravitys)
             {
-                output += field.getGravityDir(position);
+                Vector3 v3 = field.getGravityDir(position);
+                output += v3 / v3.magnitude * field.Strength(position);
             }
-            output /= foundGravitys.Count;
         }
 
         return output;
