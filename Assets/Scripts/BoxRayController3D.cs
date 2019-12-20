@@ -70,7 +70,7 @@ public class BoxRayController3D : RayController3D
 
         for (int idxY = 0;idxY < rayAmountY ; idxY++)
         {
-            Debug.DrawRay(ltwMX.MultiplyPoint3x4(boxEdges.frontBotLeft + Vector3.up * (idxY / (float)(rayAmountY -1))), Vector3.left, Color.red);
+            Debug.DrawRay(ltwMX.MultiplyPoint3x4(boxEdges.frontBotLeft + Vector3.up * (idxY / (float)(rayAmountY -1))), -transform.right, Color.red);
         }
     }
 
