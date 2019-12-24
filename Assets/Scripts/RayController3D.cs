@@ -32,6 +32,7 @@ public abstract class RayController3D : MonoBehaviour
         }
         get { return gravityDir; }
     }
+    public LayerMask colissionMask;
     Vector3 gravityDir = Vector3.down;
     Vector3 viewDirection = Vector3.forward;
     [SerializeField]

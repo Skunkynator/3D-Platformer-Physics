@@ -17,6 +17,7 @@ public class BoxRayController3D : RayController3D
     int rayAmountY = 4;
     [SerializeField]
     int rayAmountZ = 3;
+    private Vector3 size;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,15 +37,10 @@ public class BoxRayController3D : RayController3D
         ltwMX = transform.localToWorldMatrix;
         testObject.transform.position = ltwMX.MultiplyPoint3x4(boxEdges.backTopLeft);
         Debug.DrawLine(ltwMX.MultiplyPoint3x4(boxEdges.backTopRight), ltwMX.MultiplyPoint3x4(boxEdges.frontBotLeft));
+        rayAmountY = Mathf.Clamp(rayAmountY, 2, int.MaxValue);
+        rayAmountX = Mathf.Clamp(rayAmountX, 2, int.MaxValue);
+        rayAmountZ = Mathf.Clamp(rayAmountZ, 2, int.MaxValue);
         drawDebugLines();
-        /*foreach(List<Vector3> v3l in origins)
-        {
-            foreach (Vector3 orig in v3l)
-            {
-                Vector3 eedge = ltwMX.MultiplyPoint3x4(orig);
-                Debug.DrawLine(eedge, eedge + Vector3.up / 100,Color.cyan);
-            }
-        }*/
     }
 
     void initiateBoxEdges()
@@ -60,63 +56,69 @@ public class BoxRayController3D : RayController3D
         boxEdges.frontBotRight = (center + sizes[5] / 2) * (1 - skinWidth / 100);
         boxEdges.frontTopLeft = (center + sizes[6] / 2) * (1 - skinWidth / 100);
         boxEdges.backBotLeft = (center + sizes[7] / 2) * (1 - skinWidth / 100);
+        size = boxEdges.backTopRight - boxEdges.frontBotLeft;
     }
 
     void drawDebugLines()
     {
-        rayAmountY = Mathf.Clamp(rayAmountY, 2, int.MaxValue);
-        rayAmountX = Mathf.Clamp(rayAmountX, 2, int.MaxValue);
-        rayAmountZ = Mathf.Clamp(rayAmountZ, 2, int.MaxValue);
 
-        for (int idxY = 0;idxY < rayAmountY ; idxY++)
+        for (int idxZ = 0; idxZ < rayAmountZ; idxZ++)
         {
-            Debug.DrawRay(ltwMX.MultiplyPoint3x4(boxEdges.frontBotLeft + Vector3.up * (idxY / (float)(rayAmountY -1))), -transform.right, Color.red);
+            Vector3 offsetZ = Vector3.forward * (idxZ / (float)(rayAmountZ - 1)) * size.z;
+            for (int idxY = 0; idxY < rayAmountY; idxY++)
+            {
+                Vector3 offsetY = Vector3.up * (idxY / (float)(rayAmountY - 1)) * size.y;
+                Debug.DrawRay(ltwMX.MultiplyPoint3x4(boxEdges.frontBotLeft + offsetY + offsetZ), -transform.right, Color.red);
+                Debug.DrawRay(ltwMX.MultiplyPoint3x4(boxEdges.frontBotRight + offsetY + offsetZ), transform.right, Color.red);
+            }
+            for (int idxX = 0; idxX < rayAmountX; idxX++)
+            {
+                Vector3 offsetX = Vector3.right * (idxX / (float)(rayAmountX - 1)) * size.x;
+                Debug.DrawRay(ltwMX.MultiplyPoint3x4(boxEdges.frontBotLeft + offsetX + offsetZ), -transform.up, Color.red);
+                Debug.DrawRay(ltwMX.MultiplyPoint3x4(boxEdges.frontTopLeft + offsetX + offsetZ), transform.up, Color.red);
+            }
+        }
+
+        for (int idxY = 0; idxY < rayAmountY; idxY++)
+        {
+            Vector3 offsetY = Vector3.up * (idxY / (float)(rayAmountY - 1)) * size.y;
+            for (int idxX = 0; idxX < rayAmountX; idxX++)
+            {
+                Vector3 offsetX = Vector3.right * (idxX / (float)(rayAmountX - 1)) * size.x;
+                Debug.DrawRay(ltwMX.MultiplyPoint3x4(boxEdges.frontBotLeft + offsetY + offsetX), -transform.forward, Color.red);
+                Debug.DrawRay(ltwMX.MultiplyPoint3x4(boxEdges.backBotLeft + offsetY + offsetX), transform.forward, Color.red);
+            }
         }
     }
 
-    /*void initiateOrigins()
+    public void move(Vector3 direction)
     {
-        origins.up = boxEdges.VectorsPointingAt(Vector3.up).subDivide(3);
-        origins.down = boxEdges.VectorsPointingAt(Vector3.down).subDivide(3);
-        origins.left = boxEdges.VectorsPointingAt(Vector3.left).subDivide(3);
-        origins.right = boxEdges.VectorsPointingAt(Vector3.right).subDivide(3);
-        origins.forward = boxEdges.VectorsPointingAt(Vector3.forward).subDivide(3);
-        origins.back = boxEdges.VectorsPointingAt(Vector3.back).subDivide(3);
-    }
-
-
-
-    struct boxRayOrigins : IEnumerable
-    {
-        public List<Vector3> up;
-        public List<Vector3> down;
-        public List<Vector3> left;
-        public List<Vector3> right;
-        public List<Vector3> forward;
-        public List<Vector3> back;
-
-        public IEnumerator GetEnumerator()
+        Matrix4x4 wtlMX = transform.worldToLocalMatrix;
+        Vector3 currEdge = direction.x < 0 ? boxEdges.frontBotLeft : boxEdges.frontBotRight;
+        direction = wtlMX.MultiplyPoint3x4(direction);
+        Vector3 XDir = ltwMX.MultiplyPoint3x4(new Vector3(direction.x, 0, 0));
+        Vector3 YDir = ltwMX.MultiplyPoint3x4(new Vector3(0, direction.y, 0));
+        Vector3 ZDir = ltwMX.MultiplyPoint3x4(new Vector3(0, 0, direction.z));
+        float XLength = XDir.magnitude;
+        float YLength = YDir.magnitude;
+        float ZLength = ZDir.magnitude;
+        RaycastHit Xrh;
+        for (int idxZ = 0; idxZ < rayAmountZ; idxZ++)
         {
-            List<List<Vector3>> output = new List<List<Vector3>>();
-            output.Add(up);
-            output.Add(down);
-            output.Add(left);
-            output.Add(right);
-            output.Add(forward);
-            output.Add(back);
-            return output.GetEnumerator();
+            Vector3 offsetZ = Vector3.forward * (idxZ / (float)(rayAmountZ - 1)) * size.z;
+            for (int idxY = 0; idxY < rayAmountY; idxY++)
+            {
+                Vector3 offsetY = Vector3.up * (idxY / (float)(rayAmountY - 1)) * size.y; 
+                = Physics.Raycast(ltwMX.MultiplyPoint3x4(currEdge + offsetY + offsetZ),XDir, out Xrh,XLength,colissionMask);
+            }
         }
-    }*/
+    }
 
     struct boxRayOrigins
     {
-        public Vector3 frontBotLeft;
-        public Vector3 frontTopLeft;
-        public Vector3 frontBotRight;
-        public Vector3 frontTopRight;
-        public Vector3 backBotLeft;
-        public Vector3 backTopLeft;
-        public Vector3 backBotRight;
-        public Vector3 backTopRight;
+        public Vector3 frontBotLeft, frontBotRight;
+        public Vector3 frontTopLeft, frontTopRight;
+        public Vector3 backBotLeft, backBotRight;
+        public Vector3 backTopLeft, backTopRight;
     }
 }
