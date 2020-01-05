@@ -21,6 +21,13 @@ public static class skunkyExtensions
             output[idx + 4] = -output[idx];
         return output;
     }
+    public static Vector3 ScaleToThePowerOf(this Vector3 v3,float power)
+    {
+        v3.x = Mathf.Pow(v3.x * Mathf.Sign(v3.x), power) * Mathf.Sign(v3.x);
+        v3.y = Mathf.Pow(v3.y * Mathf.Sign(v3.y), power) * Mathf.Sign(v3.y);
+        v3.z = Mathf.Pow(v3.z * Mathf.Sign(v3.z), power) * Mathf.Sign(v3.z);
+        return v3;
+    }
     public static List<Vector3> VectorsPointingAt(this List<Vector3> v3L, Vector3 dir)
     {
         return v3L.VectorsPointingAt(dir, 90);
@@ -65,6 +72,7 @@ public static class skunkyExtensions
         Vector3 closestDir = Vector3.one;
         float closestAng = float.PositiveInfinity;
         float currAng;
+        foreac
         foreach (Vector3 dir in directions)
         {
             currAng = Vector3.Angle(dir, direction);
@@ -82,5 +90,18 @@ public static class skunkyExtensions
         vec1.y /= divisor.y;
         vec1.z /= divisor.z;
         return vec1;
+    }
+
+    public static Vector3 multiply(this Vector3 vec1, Vector3 mult)
+    {
+        vec1.x *= mult.x;
+        vec1.y *= mult.y;
+        vec1.z *= mult.z;
+        return vec1;
+    }
+
+    public static float sumOfCoord(this Vector3 vect)
+    {
+        return vect.x + vect.y + vect.z;
     }
 }
