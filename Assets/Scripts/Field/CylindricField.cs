@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace skunky.Fields
 {
-    public abstract class CylindricField : Field
+    public class CylindricField : Field
     {
         [SerializeField]
         float width;

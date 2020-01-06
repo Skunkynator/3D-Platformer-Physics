@@ -9,13 +9,11 @@ public abstract class RayController3D : MonoBehaviour
     {
         set
         {
-            if (value.normalized != viewDirection.normalized)
-            {
-                Vector3 val = Vector3.ProjectOnPlane(value, gravityDir);
-                if (val != Vector3.zero)
-                    viewDirection = val;
-                setRotation(viewDirection, gravityDir);
-            }
+            Vector3 val = Vector3.ProjectOnPlane(value, gravityDir);
+            //Debug.Log(val);
+            if (val != Vector3.zero)
+                viewDirection = val;
+            setRotation(viewDirection, gravityDir);
         }
         get { return viewDirection; }
     }
@@ -27,7 +25,7 @@ public abstract class RayController3D : MonoBehaviour
             {
                 gravityDir = value;
                 ViewDirection = ViewDirection;
-                setRotation(viewDirection, gravityDir);
+                setRotation(viewDirection, -gravityDir);
             }
         }
         get { return gravityDir; }

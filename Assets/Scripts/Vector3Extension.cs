@@ -72,7 +72,6 @@ public static class skunkyExtensions
         Vector3 closestDir = Vector3.one;
         float closestAng = float.PositiveInfinity;
         float currAng;
-        foreac
         foreach (Vector3 dir in directions)
         {
             currAng = Vector3.Angle(dir, direction);

@@ -22,18 +22,36 @@ class Player:MonoBehaviour
     private void Start()
     {
         controller = GetComponent<BoxRayController3D>();
-        controller.GravityDir = gravity;
+        SetGravity(gravity);
         Time.timeScale = 0.3f;
+    }
+
+    public void SetGravity(Vector3 grav)
+    {
+        controller.GravityDir = grav;
+        gravity = grav;
     }
 
     private void Update()
     {
         CalculateVelocity();
         controller.move((gravVelocity + velocity) * Time.deltaTime);
+        Debug.Log(controller.collisions.below);
+        if (controller.collisions.below)
+        {
+            gravVelocity = gravity; //Vector3.ProjectOnPlane(gravVelocity, gravity);
+        }
+    }
+    public void jump()
+    {
+        if (controller.collisions.below)
+        {
+            gravVelocity = -gravity*5;
+        }
     }
     public void SetDirectionalInput(Vector2 input)
     {
-        directionalInput = transform.worldToLocalMatrix.MultiplyVector(new Vector3(input.x,0,input.y));
+        directionalInput = transform.localToWorldMatrix.MultiplyVector(new Vector3(input.x,0,input.y));
     }
     void CalculateVelocity()
     {
@@ -43,6 +61,6 @@ class Player:MonoBehaviour
         velocity.y = Mathf.SmoothDamp(velocity.y, targetVelocityY, ref velocityYSmoothing, accelerationTimeGrounded);
         float targetVelocityZ = directionalInput.z * moveSpeed;
         velocity.z = Mathf.SmoothDamp(velocity.z, targetVelocityZ, ref velocityZSmoothing, accelerationTimeGrounded);
-        gravVelocity += gravity * Time.deltaTime;
+        gravVelocity += (gravity *  20 - gravVelocity * 0.1f) * Time.deltaTime;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace skunky.Fields
 {
-    public abstract class SphereField : Field
+    public class SphereField : Field
     {
         [SerializeField]
         float radius;

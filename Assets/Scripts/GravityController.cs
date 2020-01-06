@@ -2,12 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Player))]
 public class GravityController : MonoBehaviour
 {
+    Vector3 prevGrav = Vector3.down;
+    Vector3 curGrav;
+    Player player;
+    private void Start()
+    {
+        player = GetComponent<Player>();
+    }
     private void Update()
     {
         Vector3 pos = transform.position;
-        Debug.DrawLine(pos, pos + checkForGravity(pos));
+        curGrav = checkForGravity(pos);
+        if (curGrav != prevGrav)
+        {
+            player.SetGravity(curGrav);
+            prevGrav = curGrav;
+        }
     }
     public Vector3 checkForGravity(Vector3 position)
     {
@@ -32,6 +45,6 @@ public class GravityController : MonoBehaviour
             }
         }
 
-        return output;
+        return output / output.magnitude * 9.8f;
     }
 }

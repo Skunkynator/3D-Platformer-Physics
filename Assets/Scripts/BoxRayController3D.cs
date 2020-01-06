@@ -18,6 +18,7 @@ public class BoxRayController3D : RayController3D
     int rayAmountZ = 3;
     private Vector3 size;
     private Vector3 skin;
+    public CollisionInfo collisions;
     // Start is called before the first frame update
     void Start()
     {
@@ -95,6 +96,10 @@ public class BoxRayController3D : RayController3D
     {
         Matrix4x4 wtlMX = transform.worldToLocalMatrix;
         direction = wtlMX.MultiplyVector(direction);
+        if(direction.y > 0)
+        {
+            collisions.below = false;
+        }
         Vector3 currEdge = new Vector3(
             direction.x >= 0 ? boxEdges.frontBotRight.x : boxEdges.backBotLeft.x,
             direction.y >= 0 ? boxEdges.frontTopLeft.y : boxEdges.frontBotRight.y,
@@ -130,6 +135,10 @@ public class BoxRayController3D : RayController3D
                 if (Physics.Raycast(ltwMX.MultiplyPoint3x4(currEdge + offsetX + offsetZ), YDir, out rayHit, YLength, colissionMask))
                 {
                     YLength = rayHit.distance;
+                    if (direction.y < 0)
+                    {
+                        collisions.below = true;
+                    }
                 }
             }
         }
@@ -160,5 +169,35 @@ public class BoxRayController3D : RayController3D
         public Vector3 frontTopLeft, frontTopRight;
         public Vector3 backBotLeft, backBotRight;
         public Vector3 backTopLeft, backTopRight;
+    }
+
+    public struct CollisionInfo
+    {
+        public bool above, below;
+        public bool left, right;
+        public bool front, back;
+
+        public bool climbingSlope;
+        public bool descendingSlope;
+        public bool slidingDownMaxSlope;
+
+        public float slopeAngle, slopeAngleOld;
+        public Vector2 slopeNormal;
+        public Vector3 moveAmountOld;
+        //public bool fallingThroughPlatform;
+
+        public void Reset()
+        {
+            above = below = false;
+            left = right = false;
+            front = back = false;
+            climbingSlope = false;
+            descendingSlope = false;
+            slidingDownMaxSlope = false;
+            slopeNormal = Vector2.zero;
+
+            slopeAngleOld = slopeAngle;
+            slopeAngle = 0;
+        }
     }
 }
