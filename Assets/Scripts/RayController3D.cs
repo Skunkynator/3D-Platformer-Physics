@@ -13,6 +13,9 @@ public abstract class RayController3D : MonoBehaviour
             //Debug.Log(val);
             if (val != Vector3.zero)
                 viewDirection = val;
+            else
+                viewDirection = Vector3.Cross(gravityDir, new Vector3(gravityDir.y, gravityDir.z, gravityDir.x));
+
             setRotation(viewDirection, gravityDir);
         }
         get { return viewDirection; }
@@ -41,8 +44,6 @@ public abstract class RayController3D : MonoBehaviour
     private void setRotation(Vector3 directionTest, Vector3 gravityDirTest)
     {
         Quaternion q = transform.localRotation;
-        directionTest = Vector3.ProjectOnPlane(directionTest, gravityDirTest);
-
         q.SetLookRotation(directionTest, gravityDirTest);
         transform.localRotation = q;
     }

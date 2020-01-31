@@ -8,6 +8,10 @@ namespace skunky.Gravity
     {
         [SerializeField]
         Vector3 direction;
+        private void Start()
+        {
+            //GravityField.gravTypes.Add("single", getGravityDir);
+        }
         public override float Strength(Vector3 position)
         {
             return 1;

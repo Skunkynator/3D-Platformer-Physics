@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -155,12 +156,16 @@ public class BoxRayController3D : RayController3D
                 }
             }
         }
+        XLength /= transform.lossyScale.x;
+        YLength /= transform.lossyScale.y;
+        ZLength /= transform.lossyScale.z;
         direction = new Vector3(
             (XLength - skin.x) * Mathf.Sign(direction.x),
             (YLength - skin.y) * Mathf.Sign(direction.y),
             (ZLength - skin.z) * Mathf.Sign(direction.z)
             );
-        transform.position += ltwMX.MultiplyVector(direction);
+        Vector3 worldDir = ltwMX.MultiplyVector(direction);
+        transform.position += worldDir * direction.magnitude / worldDir.magnitude;
     }
 
     struct boxRayOrigins

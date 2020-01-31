@@ -23,9 +23,9 @@ public static class skunkyExtensions
     }
     public static Vector3 ScaleToThePowerOf(this Vector3 v3,float power)
     {
-        v3.x = Mathf.Pow(v3.x * Mathf.Sign(v3.x), power) * Mathf.Sign(v3.x);
-        v3.y = Mathf.Pow(v3.y * Mathf.Sign(v3.y), power) * Mathf.Sign(v3.y);
-        v3.z = Mathf.Pow(v3.z * Mathf.Sign(v3.z), power) * Mathf.Sign(v3.z);
+        v3.x = Mathf.Pow(Mathf.Abs(v3.x), power) * Mathf.Sign(v3.x);
+        v3.y = Mathf.Pow(Mathf.Abs(v3.y), power) * Mathf.Sign(v3.y);
+        v3.z = Mathf.Pow(Mathf.Abs(v3.z), power) * Mathf.Sign(v3.z);
         return v3;
     }
     public static List<Vector3> VectorsPointingAt(this List<Vector3> v3L, Vector3 dir)

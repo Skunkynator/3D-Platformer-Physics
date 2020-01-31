@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using skunky.Fields;
 using skunky.Gravity;
+using System;
 
 public class GravityField : MonoBehaviour
 {
+    public delegate Vector3 GravityGetter(Vector3 position,GameObject gameObject);
+    static public Dictionary<string, GravityGetter> gravTypes = new Dictionary<string,GravityGetter>();
     static public List<GravityField> allFields = new List<GravityField>();
     private Field field;
     private Gravity grav;
@@ -14,6 +17,7 @@ public class GravityField : MonoBehaviour
         field = GetComponent<Field>();
         grav = GetComponent<Gravity>();
         allFields.Add(this);
+        
     }
     public Vector3 getGravityDir(Vector3 position)
     {

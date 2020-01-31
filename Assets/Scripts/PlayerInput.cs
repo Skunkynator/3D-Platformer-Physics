@@ -15,7 +15,11 @@ class PlayerInput:MonoBehaviour
     }
     private void Update()
     {
-        Vector2 directionalInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        float Xinput = Input.GetAxisRaw("Horizontal");
+        float Yinput = Input.GetAxisRaw("Vertical");
+        Vector2 directionalInput = new Vector2(Xinput, Yinput);
+        if(directionalInput != Vector2.zero)
+            directionalInput *= (Mathf.Abs(Xinput) < Mathf.Abs(Yinput) ? Mathf.Abs(Yinput) : Mathf.Abs(Xinput)) / directionalInput.magnitude; ;
         player.SetDirectionalInput(directionalInput);
         if (Input.GetKeyDown(KeyCode.Space))
         {
